@@ -1,33 +1,95 @@
 package com.test.mybatis01;
 
 import com.Mybatis.mapper.UserMapper;
-import org.apache.ibatis.io.Resources;
+import com.Mybatis.pojo.User;
+import com.Mybatis.utils.GetSqlSession;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class Test01 {
     @Test
-    public void insertTest() throws IOException {
-        // 读取Mybatis的核心配置文件
-        InputStream inputStream = Resources.getResourceAsStream("mybatis-config.xml");
-        // 创建sqlSessionFactoryBuilder对象
-        SqlSessionFactoryBuilder sqlSessionFactoryBuilder = new SqlSessionFactoryBuilder();
-        // 通过核心配置文件所对应的字节输入流创建SqlSessionFactory，产生SqlSession对象
-        SqlSessionFactory sessionFactory = sqlSessionFactoryBuilder.build(inputStream);
-        SqlSession sqlSession = sessionFactory.openSession(true);
-        // 通过代理模式创建UserMapper接口的代理实现类对象
+    public void insertTest(){
+        SqlSession sqlSession = GetSqlSession.getSqlSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        // 调用UserMapper接口中的方法，就可以根据UserMapper的全类名匹配元素文件，通过调用的方法名匹配映射文件中的SQL标签
-        // 并执行标签中的SQL语句
         int result = userMapper.insertUser();
-        //  sqlSession.commit();
         System.out.println("结果" + result);
         sqlSession.close();
-
     }
+
+    @Test
+    public void updateTest(){
+        SqlSession sqlSession = GetSqlSession.getSqlSession();
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        int result = userMapper.updateUser();
+        System.out.println("结果" + result);
+        sqlSession.close();
+    }
+
+    @Test
+    public void deleteTest(){
+        SqlSession sqlSession = GetSqlSession.getSqlSession();
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        int result = userMapper.deleteUser();
+        System.out.println("结果" + result);
+        sqlSession.close();
+    }
+
+    @Test
+    public void selectUserByIdTest(){
+        SqlSession sqlSession = GetSqlSession.getSqlSession();
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        User user = userMapper.selectUserById(3);
+        System.out.println("结果" + user);
+        sqlSession.close();
+    }
+
+    @Test
+    public void selectUserListTest(){
+        SqlSession sqlSession = GetSqlSession.getSqlSession();
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        List<User> users = userMapper.selectUserList();
+        users.forEach(System.out::println);
+        sqlSession.close();
+    }
+
+    @Test
+    public void selectUserCountTest(){
+        SqlSession sqlSession = GetSqlSession.getSqlSession();
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        int i = userMapper.selectUserCount();
+        System.out.println("结果" + i);
+        sqlSession.close();
+    }
+
+    @Test
+    public void selectUserToMapsTest(){
+        SqlSession sqlSession = GetSqlSession.getSqlSession();
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        Map<String, Object> maps = userMapper.selectUserToMaps();
+        System.out.println("结果" + maps);
+        sqlSession.close();
+    }
+
+    @Test
+    public void selectUserToListTest(){
+        SqlSession sqlSession = GetSqlSession.getSqlSession();
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        List<Map<String, Object>> maps = userMapper.selectUserToList();
+        System.out.println("结果" + maps);
+        sqlSession.close();
+    }
+
+    @Test
+    public void selectUserToMapTest(){
+        SqlSession sqlSession = GetSqlSession.getSqlSession();
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        List<Map<String, Object>> maps = userMapper.selectUserToList();
+        System.out.println("结果" + maps);
+        sqlSession.close();
+    }
+
 }
